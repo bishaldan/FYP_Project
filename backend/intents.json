@@ -1,0 +1,232 @@
+{
+  "intents": [
+    {
+      "tag": "greeting",
+      "patterns": [
+        "Hi",
+        "Hey",
+        "How are you",
+        "Is anyone there?",
+        "Hello",
+        "Good day"
+      ],
+      "responses": [
+        "Hey :-)",
+        "Hello, thanks for visiting",
+        "Hi there, what can I do for you?",
+        "Hi there, how can I help?"
+      ]
+    },
+    {
+      "tag": "goodbye",
+      "patterns": ["Bye", "See you later", "Goodbye"],
+      "responses": [
+        "See you later, thanks for visiting",
+        "Have a nice day",
+        "Bye! Come back again soon."
+      ]
+    },
+    {
+      "tag": "thanks",
+      "patterns": ["Thanks", "Thank you", "That's helpful", "Thank's a lot!"],
+      "responses": ["Happy to help!", "Any time!", "My pleasure"]
+    },
+    {
+      "tag": "items",
+      "patterns": [
+        "Which items do you have?",
+        "What kinds of items are there?",
+        "What do you sell?"
+      ],
+      "responses": [
+        "We sell coffee and tea",
+        "We have coffee and tea"
+      ]
+    },
+    {
+      "tag": "payments",
+      "patterns": [
+        "Do you take credit cards?",
+        "Do you accept Mastercard?",
+        "Can I pay with Paypal?",
+        "Are you cash only?"
+      ],
+      "responses": [
+        "We accept VISA, Mastercard and Paypal",
+        "We accept most major credit cards, and Paypal"
+      ]
+    },
+    {
+      "tag": "delivery",
+      "patterns": [
+        "How long does delivery take?",
+        "How long does shipping take?",
+        "When do I get my delivery?"
+      ],
+      "responses": [
+        "Delivery takes 2-4 days",
+        "Shipping takes 2-4 days"
+      ]
+    },
+    {
+      "tag": "funny",
+      "patterns": [
+        "Tell me a joke!",
+        "Tell me something funny!",
+        "Do you know a joke?"
+      ],
+      "responses": [
+        "Why did the hipster burn his mouth? He drank the coffee before it was cool.",
+        "What did the buffalo say when his son left for college? Bison."
+      ]
+    },
+    {
+      "tag": "c7",
+      "patterns": [
+         "what is the routen of c7",
+         "Can you provide information about the route of c7?",
+         "Tell me about the path or course of c7?",
+         "Provide details on the journey or itinerary of c7?",
+         "Explain the route for c7?",
+         "How can I navigate the path of c7?",
+         "What directions should I follow for c7?",
+         "Describe the route taken by c7?",
+         "Share insights on the course or route of c7?",
+         "What are the steps involved in the route of c7?"
+      ],
+      "responses": [
+         "+-----------+----------------------+------------------------------+--------------------------------------+\n|    Day    |         Time         |    Location                  |             Subject                  |\n+-----------+----------------------+------------------------------+--------------------------------------+\n|    SUN    | 09:00 AM - 11:00 AM  |  UK Lab-Oxford               | Aapplication Development             \n+-----------+----------------------+------------------------------+--------------------------------------+\n|    TUE    | 09:00 AM - 11:00 AM  |  Alumni SR9-Simran Bhattari  | Advanced Database Systems Development|\n+-----------+----------------------+------------------------------+--------------------------------------+\n|    WED    | 07:00 AM - 09:00 AM  |  Alumni SR1-Samir Gautam     | Artificial Intelligence              |\n+-----------+----------------------+------------------------------+--------------------------------------+\n|    THU    | 07:00 AM - 08:30 AM  |  Kumari Hall-1(lecture)      | Advanced Database Systems Development|\n+-----------+----------------------+------------------------------+--------------------------------------+\n|    FRI    | 07:00 AM - 08:30 AM  |  Kumari Hall-1(lecture)      | Aapplication Development             |\n+-----------+----------------------+------------------------------+--------------------------------------+\n|    FRI    | 09:00 AM - 10:30 AM  |  Kumari Hall-1(lecture)      | Artificial Intelligence              |\n+-----------+----------------------+------------------------------+--------------------------------------+\n"
+      ],
+      "context_set": ""
+   },
+   {
+        "tag": "course",
+        "patterns": [
+          "list of courses",
+          "list of courses offered",
+          "list of courses offered in",
+          "what are the courses offered in your college?",
+          "courses?",
+          "courses offered",
+          "courses offered in (your univrsity(UNI) name)",
+          "courses you offer",
+          "branches?",
+          "courses available at UNI?",
+          "branches available at your college?",
+          "what are the courses in UNI?",
+          "what are branches in UNI?",
+          "what are courses in UNI?",
+          "branches available in UNI?",
+          "can you tell me the courses available in UNI?",
+          "can you tell me the branches available in UNI?",
+          "computer engineering?",
+          "computer",
+          "Computer engineering?",
+          "it",
+          "IT",
+          "Information Technology",
+          "AI/Ml",
+          "Mechanical engineering",
+          "Chemical engineering",
+          "Civil engineering"
+        ],
+        "responses": [
+          "Our university offers Information Technology, computer Engineering, Mechanical engineering,Chemical engineering, Civil engineering and extc Engineering."
+        ],
+        "context_set": ""
+    },
+    {
+      "tag": "fees",
+      "patterns": [
+         "information about fee",
+         "information on fee",
+         "tell me the fee",
+         "college fee",
+         "fee per semester",
+         "what is the fee of each semester",
+         "what is the fees of each year",
+         "what is fee",
+         "what is the fees",
+         "how much is the fees",
+         "fees for first year",
+         "fees",
+         "about the fees",
+         "tell me something about the fees",
+         "What is the fees of hostel",
+         "how much is the fees",
+         "hostel fees",
+         "fees for AC room",
+         "fees for non-AC room",
+         "fees for Ac room for girls",
+         "fees for non-Ac room for girls",
+         "fees for Ac room for boys",
+         "fees for non-Ac room for boys"
+      ],
+      "responses": [
+         "For Fee detail visit <a target=\"_blank\" href=\"LINK\"> here</a>"
+      ],
+      "context_set": ""
+   },
+   {
+    "tag": "location",
+    "patterns": [
+       "where is the college located",
+       "college is located at",
+       "where is college",
+       "where is college located",
+       "address of college",
+       "how to reach college",
+       "college location",
+       "college address",
+       "wheres the college",
+       "how can I reach college",
+       "whats is the college address",
+       "what is the address of college",
+       "address",
+       "location"
+    ],
+    "responses": [
+       "<a target=\"_blank\" href=\"ADD YOU GOOGLE MAP LINK HERE\"> here</a>"
+    ],
+    "context_set": ""
+    },
+    {
+        "tag": "c9",
+        "patterns": [
+          "what is the routen of c9",
+          "Can you provide information about the route of c9?",
+          "Tell me about the path or course of c9?",
+          "Provide details on the journey or itinerary of c9?",
+          "Explain the route for c9?",
+          "How can I navigate the path of c9?",
+          "What directions should I follow for c9?",
+          "Describe the route taken by c9?",
+          "Share insights on the course or route of c9?",
+          "What are the steps involved in the route of c9?"
+        ],
+        "responses": [
+          "+-----------+----------------------+------------------------------+--------------------------------------+\n|    Day    |         Time         |    Location                  |             Subject                  |\n+-----------+----------------------+------------------------------+--------------------------------------+\n|    SUN    | 09:00 AM - 11:00 AM  |  UK Lab-Oxford               | Artificial Intelligence              |\n+-----------+----------------------+------------------------------+--------------------------------------+\n|    TUE    | 09:00 AM - 11:00 AM  |  Alumni SR9-Simran Bhattari  | Aapplication Development             |\n+-----------+----------------------+------------------------------+--------------------------------------+\n|    WED    | 07:00 AM - 09:00 AM  |  Alumni SR1-Samir Gautam     | Advanced Database Systems Development|\n+-----------+----------------------+------------------------------+--------------------------------------+\n|    THU    | 07:00 AM - 08:30 AM  |  Kumari Hall-1(lecture)      | Advanced Database Systems Development|\n+-----------+----------------------+------------------------------+--------------------------------------+\n|    FRI    | 07:00 AM - 08:30 AM  |  Kumari Hall-1(lecture)      | Aapplication Development             |\n+-----------+----------------------+------------------------------+--------------------------------------+\n|    FRI    | 09:00 AM - 10:30 AM  |  Kumari Hall-1(lecture)      | Artificial Intelligence              |\n+-----------+----------------------+------------------------------+--------------------------------------+\n"
+        ],
+        "context_set": ""
+    },
+    {
+        "tag": "c7",
+        "patterns": [
+          "what is the routen of c7",
+          "Can you provide information about the route of c7?",
+          "Tell me about the path or course of c7?",
+          "Provide details on the journey or itinerary of c7?",
+          "Explain the route for c7?",
+          "How can I navigate the path of c7?",
+          "What directions should I follow for c7?",
+          "Describe the route taken by c7?",
+          "Share insights on the course or route of c7?",
+          "What are the steps involved in the route of c7?"
+        ],
+        "responses": [
+          "+-----------+----------------------+------------------------------+--------------------------------------+\n|    Day    |         Time         |    Location                  |             Subject                  |\n+-----------+----------------------+------------------------------+--------------------------------------+\n|    SUN    | 09:00 AM - 11:00 AM  |  UK Lab-Oxford               | Aapplication Development             \n+-----------+----------------------+------------------------------+--------------------------------------+\n|    TUE    | 09:00 AM - 11:00 AM  |  Alumni SR9-Simran Bhattari  | Advanced Database Systems Development|\n+-----------+----------------------+------------------------------+--------------------------------------+\n|    WED    | 07:00 AM - 09:00 AM  |  Alumni SR1-Samir Gautam     | Artificial Intelligence              |\n+-----------+----------------------+------------------------------+--------------------------------------+\n|    THU    | 07:00 AM - 08:30 AM  |  Kumari Hall-1(lecture)      | Advanced Database Systems Development|\n+-----------+----------------------+------------------------------+--------------------------------------+\n|    FRI    | 07:00 AM - 08:30 AM  |  Kumari Hall-1(lecture)      | Aapplication Development             |\n+-----------+----------------------+------------------------------+--------------------------------------+\n|    FRI    | 09:00 AM - 10:30 AM  |  Kumari Hall-1(lecture)      | Artificial Intelligence              |\n+-----------+----------------------+------------------------------+--------------------------------------+\n"
+        ],
+        "context_set": ""
+    }
+  ]
+}
