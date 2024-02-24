@@ -99,6 +99,7 @@
     </style>
 </head>
 <body>
+    {% load static %}
     <div class="nav">
         <input type="checkbox" id="nav-check">
         <div class="nav-header">
@@ -120,13 +121,13 @@
     </div>
 
     <div class="big-button-container">
-        <a href="chatbot_student.html" class="big-button">Chatbot</a>
+        <a href="chatbot/" class="big-button">Chatbot</a>
         <a href="#" class="big-button">Fee Status</a>
         <a href="#" class="big-button">Announcement</a>
     </div>
 
     <div class="image-slider">
-        <img src="lo_pic.jpg" alt="Slider Image 1">
+        <img src="{% static '/lo_pic.jpg' %}" alt="Slider Image 1">
         <img src="slider-image2.jpg" alt="Slider Image 2">
         <img src="slider-image3.jpg" alt="Slider Image 3">
     </div>
