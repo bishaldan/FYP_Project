@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Student</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .nav {
+            height: 50px;
+            width: 100%;
+            background-color: #D2966B;
+            position: relative;
+        }
+
+        .nav > .nav-header {
+            display: inline;
+        }
+
+        .nav > .nav-header > .nav-title {
+            display: inline-block;
+            font-size: 22px;
+            color: #fff;
+            padding: 10px;
+        }
+
+        .nav > .nav-btn {
+            display: none;
+        }
+
+        .nav > .nav-links {
+            display: inline;
+            float: right;
+            font-size: 18px;
+        }
+
+        .nav > .nav-links > a {
+            display: inline-block;
+            padding: 13px 10px;
+            text-decoration: none;
+            color: #efefef;
+        }
+
+        .nav > .nav-links > a:hover {
+            background-color: rgba(0, 0, 0, 0.3);
+        }
+
+        .nav > #nav-check {
+            display: none;
+        }
+
+        .login-button {
+            display: inline-block;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background-color: green;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-right: 20px;
+            line-height: 1;
+            margin-top: 2px;
+            width: 100px;
+        }
+
+        .vertical-div {
+            width: 200px;
+            height: 100%;
+            background-color: #FAFAF5;
+            position: fixed;
+            top: 50px;
+            left: 0;
+            padding-top: 20px;
+        }
+
+        .vertical-buttons {
+            display: flex;
+            flex-direction: column;
+            padding: 10px;
+        }
+
+        .vertical-buttons a {
+            margin-bottom: 10px;
+            padding: 10px;
+            width: 100%;
+            background-color: #D9D9D9;
+            border: none;
+            border-radius: 5px;
+            color: black; /* Text color */
+            text-align: center;
+            text-decoration: none;
+            cursor: pointer;
+            display: block; /* Ensure anchor tags behave like block elements */
+        }
+
+        .vertical-buttons a:hover {
+            background-color: #C0C0C0;
+        }
+
+        .welcome-home {
+            position: fixed;
+            top: 50px;
+            right: 0;
+            padding: 20px;
+            font-size: 20px;
+            background-color: #FAFAF5;
+            color: black;
+            height: calc(100% - 50px); /* Take full height minus the height of the navigation bar */
+            width: calc(100% - 200px); /* Take width minus the width of the vertical div */
+            overflow-y: auto; /* Add scrollbar if content overflows */
+        }
+
+        form {
+            background-color: #FAFAF5;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            color: #555;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+        }
+
+        button[type="submit"] {
+            background-color: #D2966B;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #A6724B;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin-top: 10px;
+        }
+
+        li {
+            color: green;
+        }
+    </style>
+</head>
+<body>
+    <div class="nav">
+        <input type="checkbox" id="nav-check">
+        <div class="nav-header">
+            <div class="nav-title">
+                Student Care 
+            </div>
+        </div>
+        <div class="nav-btn">
+            <label for="nav-check">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
+        </div>       
+    </div>
+
+    <!-- Vertical Div with Buttons -->
+    <div class="vertical-div">
+        <div class="vertical-buttons">
+            <a href="/teacher/">Home</a>
+            <a href="/announcement/">Announcement</a>
+        </div>
+    </div>
+    
+    <div class="welcome-home">
+        <h2>Add Student</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Save</button>
+        </form>
+        <!-- Display success message if it exists -->
+        {% if messages %}
+            <ul>
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+</body>
+</html>
