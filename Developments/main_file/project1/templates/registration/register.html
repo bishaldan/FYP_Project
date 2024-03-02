@@ -1,0 +1,17 @@
+<html>
+
+    <h1> Register now! </h1>
+
+    <form method="POST" autocomplete="off">
+
+        {% csrf_token %}
+
+        {{registerform.as_p}}
+
+        <div class="nav-links">
+            <a href="{% url 'login' %}" class="login-button"></a>
+        </div>
+
+    </form>
+
+</html
