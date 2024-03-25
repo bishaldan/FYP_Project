@@ -165,7 +165,20 @@
         li {
             color: green;
         }
+        
     </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('.edit-btn').click(function() {
+                var row = $(this).closest('tr');
+                var form = row.next('.edit-form');
+                if (form.length) {
+                    form.toggle();
+                }
+            });
+        });
+    </script>
 </head>
 <body>
     <div class="nav">
@@ -190,24 +203,26 @@
             <a href="/teacher/">Home</a>
             <a href="/announcement/">Announcement</a>
             <a href="/get_announcement/">View Announcement</a>
+            <a href="/add_student/">Add Student</a>
         </div>
     </div>
     
     <div class="welcome-home">
-        <h2>Add Student</h2>
+        <h1>Edit Student</h1>
+        <h1>Student Detail</h1>
+        <p>Email: {{ student.email }}</p>
+        <p>First Name: {{ student.first_name }}</p>
+        <p>Last Name: {{ student.last_name }}</p>
+        <p>Fee: {{ student.fee }}</p>
+        <p>Joining Year: {{ student.joining_year }}</p>
+        <p>Field of Study: {{ student.field_of_study }}</p>
+    
+        <h2>Edit Student Detail</h2>
         <form method="post">
             {% csrf_token %}
             {{ form.as_p }}
-            <button type="submit">Save</button>
+            <button type="submit">Save Changes</button>
         </form>
-        <!-- Display success message if it exists -->
-        {% if messages %}
-            <ul>
-                {% for message in messages %}
-                    <li>{{ message }}</li>
-                {% endfor %}
-            </ul>
-        {% endif %}
     </div>
 </body>
 </html>

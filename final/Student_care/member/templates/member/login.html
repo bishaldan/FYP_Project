@@ -9,6 +9,17 @@
     <link href="{% static 'css/login.css' %}" rel="stylesheet">
     <title>Home</title>
     <style>
+        .image-container {
+    width: 60%; /* Adjust the width of the container */
+    height: 400px;
+    margin: auto; /* Center the container horizontally */
+}
+
+.image-container img {
+    width: 90%; /* Make the image fill the container */
+    height: 100%; /* Make the image fill the container height */
+    object-fit: cover; /* Ensure the image covers the entire container */
+}
        
     </style>
 </head>
@@ -33,7 +44,7 @@
             </form>
         </div>
         <div class="image-container">
-            <img src='lo_pic.jpg' alt="Your Image">
+            <img src='https://islington.edu.np/images/home/infrastructure-md.jpg' alt="Your Image">
         </div>
     </div>
 

@@ -12,4 +12,17 @@ urlpatterns = [
     path('announcement/', views.announcement, name='announcement'),
     path('get_announcement/', views.get_announcement, name='get_announcement'),
 
+
+    path('announcement_student/', views.announcement_student,
+         name='announcement_student'),
+    # URL pattern for fee Status
+    path('fee_status/', views.fee_status, name='fee_status'),
+    path('payment/', views.payment_page, name='payment_page'),
+    # path('chatbot/', views.chat_with_bot, name='chatbot')
+
+    path('edit_studnt/', views.edit_student, name='edit_student'),
+
+
+
+
 ]

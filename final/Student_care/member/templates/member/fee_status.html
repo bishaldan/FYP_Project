@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
+    <title>Fee Status</title>
     <style>
         * {
             box-sizing: border-box;
@@ -80,7 +80,6 @@
             top: 50px;
             left: 0;
             padding-top: 20px;
-            z-index: 1;
         }
 
         .vertical-buttons {
@@ -133,38 +132,75 @@
             height: 100%; /* Take full height */
             width: calc(100% - 200px); /* Take width minus the width of the vertical div */
         }
-        .centered-content {
-    position: absolute;
-    left: 15%;
-    width: 70%; /* Adjust the width of the centered content */
-    margin: 0 auto; /* Center the content horizontally */
-    padding: 20px; /* Add padding for spacing */
-}
-
-.container {
-    display: flex;
-    justify-content: space-between; /* Adjust the space between the divs */
-    margin-top: 20px; /* Add margin for spacing */
-}
-@keyframes slideInFromLeft {
-    0% {
-        transform: translateX(-100%);
-        opacity: 0;
+        
+        
+    .fee-container {
+        max-width: 800px;
+        margin: 50px auto;
+        padding: 20px;
+        background-color: #f8f9fa;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
-    100% {
-        transform: translateX(0);
-        opacity: 1;
-    }
-}
 
-/* Apply animation to Bar-Graph and Pie-Chart divs */
-.Bar-Graph,
-.Pie-Chart {
-    width: 48%; /* Adjust the width of the individual divs */
-    padding: 10px; /* Add padding for spacing */
-    animation: slideInFromLeft 0.5s ease-out forwards; /* Apply animation */
-}
-       
+    .fee {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    form {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    form label {
+        display: block;
+        margin-bottom: 10px;
+        font-weight: bold;
+    }
+
+    form input[type="email"],
+    form input[type="password"] {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+    }
+
+    form button {
+        width: 100%;
+        padding: 10px;
+        background-color: #D2966B;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    form button:hover {
+        background-color: #B37852;
+    }
+
+    .student-details {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        margin-top: 20px;
+    }
+
+    .student-details h3 {
+        margin-bottom: 10px;
+    }
+
+    .student-details p {
+        margin-bottom: 5px;
+    }
     </style>
 </head>
 <body>
@@ -187,26 +223,50 @@
     <!-- Vertical Div with Buttons -->
     <div class="vertical-div">
         <div class="vertical-buttons">
-            <a href="/add_student/">ADD Student</a>
-            <a href="/announcement/">Announcement</a>
-            <a href="/get_announcement/">View Announcement</a>
+            <a href="/fee_status/">fee_status</a>
+            <a href="/chatbot/">ChatBot</a>
+            <a href="/announcement_student/">Announcement</a>
         </div>
     </div>
-    
-    
-    <div class="centered-content">
-        <h1 style="text-align: center;"> Studet Dashboard</h1>
-        <div class="container">
-            
-            <div class="Bar-Graph">
-                <h2>Number of Student by joining Year</h2>
-                <img src="{{ joining_year_plot_url }}" alt="Joining Year Bar Graph" style="display: inline-block; width: 90%;">
-            </div>
-            <div class="Pie-Chart">
-                <h2>Number of Students by Subject</h2>
-                <img src="{{ subject_plot_url }}" alt="Subject Pie Chart" style="display: inline-block; width: 90%;">
-            </div>
+
+   <div class="fee-container">
+        <div class="fee">
+            <h2>Check Fee Status </h2>
+        </div>
+        <div class="fee-check">
+            <h2>Fee Status Check</h2>
+            <form method="post">
+                {% csrf_token %}
+                <label for="email">Email:</label>
+                {{ form.email }}
+                <label for="password">Password:</label>
+                {{ form.password }}
+                <button type="submit">Check Fee Status</button>
+            </form>
+            {% if student %}
+                <div class="student-details">
+                    <h3>Student Details:</h3>
+                    <p>Name: {{ student.first_name }} {{ student.last_name }}</p>
+                    <p>Email: {{ student.email }}</p>
+                    {% if fee_status == '0.00' %}
+                        <div class="fee-status">
+                            <p>
+                                Your fee has been cleared.</p>
+                        </div>
+                    {% else %}
+                        <div class="fee-status">
+                            <p>Your fee is: {{ fee_status }}</p>
+                            <p>How would you like to proceed with the payment?</p>
+                            <a href="{% url 'payment_page' %}">Proceed to payment</a>
+                        </div>
+                    {% endif %}
+                </div>
+            {% endif %}
+            {% if error_message %}
+                <p>{{ error_message }}</p>
+            {% endif %}
         </div>
     </div>
+
 </body>
 </html>

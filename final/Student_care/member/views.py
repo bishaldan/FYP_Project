@@ -1,15 +1,27 @@
-from .forms import AnnouncementForm
-from datetime import datetime
-from django.contrib import messages
-from django.contrib import messages  # Import messages module
-from .forms import StudentForm
-from django.shortcuts import render, redirect
-from django.contrib.auth.models import User
-from django.shortcuts import render
-from .models import Teacher, Student
-from .models import Announcement
+import io
+from matplotlib.figure import Figure
+from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
+from django.db.models import Count
+from django.utils import timezone
 from .forms import AnnouncementForm  # You need to define this form
+from .models import Announcement
+from .models import Teacher, Student
+from django.shortcuts import render
+from django.shortcuts import render, redirect
+from .forms import StudentForm
+from django.contrib import messages  # Import messages module
+from django.contrib import messages
+from datetime import datetime
+from .forms import AnnouncementForm
+from django.http import HttpResponse
 
+
+from django.shortcuts import render, redirect, get_object_or_404
+
+from .forms import FeeStatusCheckForm
+from .models import Student
+
+import matplotlib.pyplot as plt
 # Create your views here.
 
 
@@ -46,11 +58,60 @@ def login_page(request):
 
 
 def student_dashboard(request):
-    return render(request, 'member/student_dashboard.html')
+    return render(request, 'member/student.html')
 
 
 def teacher_dashboard(request):
-    return render(request, 'member/teacher_dashboard.html')
+    # Set Matplotlib to use non-interactive backend
+    import matplotlib
+    matplotlib.use('Agg')
+
+    # Get data for analysis
+    joining_year_counts = Student.objects.values(
+        'joining_year').annotate(count=Count('id'))
+    subject_counts = Student.objects.values(
+        'field_of_study').annotate(count=Count('id'))
+
+    # Prepare data for plotting
+    years = [entry['joining_year'] for entry in joining_year_counts]
+    counts = [entry['count'] for entry in joining_year_counts]
+
+    subjects = [entry['field_of_study'] for entry in subject_counts]
+    subject_counts = [entry['count'] for entry in subject_counts]
+
+    # Create Matplotlib bar graph for joining years
+    plt.figure(figsize=(10, 5))
+    plt.bar(years, counts)
+    plt.xlabel('Joining Year')
+    plt.ylabel('Number of Students')
+    plt.title('Number of Students by Joining Year')
+    plt.xticks(rotation=45)  # Rotate x-axis labels for better visibility
+    plt.tight_layout()  # Adjust layout to prevent overlap of labels
+
+    # Save the joining year plot to a file
+    joining_year_plot_file = r'C:\Users\Mr Bishal\OneDrive\FYP_project\Chatbot\final\Student_care\member\static\joining_year_plot.png'
+    plt.savefig(joining_year_plot_file)
+    plt.close()
+
+    # Create Matplotlib pie chart for subjects
+    plt.figure(figsize=(8, 8))
+    plt.pie(subject_counts, labels=subjects, autopct='%1.1f%%', startangle=140)
+    plt.title('Number of Students by Subject')
+    # Equal aspect ratio ensures that pie is drawn as a circle
+    plt.axis('equal')
+
+    # Save the subject pie chart to a file
+    subject_plot_file = r'C:\Users\Mr Bishal\OneDrive\FYP_project\Chatbot\final\Student_care\member\static\subject_plot.png'
+    plt.savefig(subject_plot_file)
+    plt.close()
+
+    # Construct the URLs for the plot files
+    # Assuming your STATIC_URL is '/static/'
+    joining_year_plot_url = '/static/joining_year_plot.png'
+    # Assuming your STATIC_URL is '/static/'
+    subject_plot_url = '/static/subject_plot.png'
+
+    return render(request, 'member/teacher_dashboard.html', {'joining_year_plot_url': joining_year_plot_url, 'subject_plot_url': subject_plot_url})
 
 
 def add_student(request):
@@ -74,14 +135,18 @@ def announcement(request):
         form = AnnouncementForm(request.POST)
         if form.is_valid():
             announcement = form.save(commit=False)
-            announcement.posted_date = datetime.now()
+            announcement.date = timezone.now()
             announcement.save()
-            messages.success(
-                request, f'Announcement posted successfully on {announcement.posted_date.strftime("%Y-%m-%d %H:%M:%S")}')
-            return redirect('view_announcement')
+            messages.success(request, 'Announcement posted successfully.')
+            return redirect('announcement')
+        else:
+            messages.error(
+                request, 'Form is not valid. Please correct the errors.')
     else:
         form = AnnouncementForm()
-    return render(request, 'member/announcement.html', {'form': form})
+    announcements = Announcement.objects.order_by(
+        '-date')[:5]  # Fetch latest 5 announcements
+    return render(request, 'member/announcement.html', {'form': form, 'announcements': announcements})
 
 
 def get_announcement(request):
@@ -90,3 +155,46 @@ def get_announcement(request):
     announcements = Announcement.objects.all()
 
     return render(request, 'member/get_announcement.html', {'announcements': announcements})
+
+
+def announcement_student(request):
+    announcements = Announcement.objects.all()
+    return render(request,  'member/announcement_student.html', {'announcements': announcements})
+
+
+def fee_status(request):
+    if request.method == 'POST':
+        form = FeeStatusCheckForm(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data['email']
+            password = form.cleaned_data['password']
+            try:
+                student = Student.objects.get(email=email, password=password)
+                fee_status = student.fee  # Assuming 'fee_status' is a field in the Student model
+                return render(request, 'member/fee_status.html', {'student': student, 'fee_status': fee_status})
+            except Student.DoesNotExist:
+                error_message = "No student found with this email and password."
+                return render(request, 'member/fee_status.html', {'form': form, 'error_message': error_message})
+    else:
+        form = FeeStatusCheckForm()
+    return render(request, 'member/fee_status.html', {'form': form})
+
+
+def payment_page(request):
+    # Add your logic for the payment page view here
+    return render(request, 'payment_page.html')
+
+
+def edit_student(request, email):
+    student = get_object_or_404(Student, email=email)
+    if request.method == 'POST':
+        form = StudentForm(request.POST, instance=student)
+        if form.is_valid():
+            form.save()
+            return redirect('student_detail', email=email)
+    else:
+        form = StudentForm(instance=student)
+    return render(request, 'member/edit_studnt.html', {'student': student, 'form': form})
+
+
+# Chatbot

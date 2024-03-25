@@ -1,37 +1,36 @@
 import numpy as np
 import random
-import json
-
 import torch
 import torch.nn as nn
 from torch.utils.data import Dataset, DataLoader
-
 from nltk_utils import bag_of_words, tokenize, stem
 from model import NeuralNet
+from .models import Intent  # Import your Django model here
 
-with open('intents.json', 'r') as f:
-    intents = json.load(f)
+# Retrieve intents from the database model
+intents = Intent.objects.all().values()
 
 all_words = []
 tags = []
 xy = []
-# loop through each sentence in our intents patterns
-for intent in intents['intents']:
+
+# Loop through each record in the database model
+for intent in intents:
     tag = intent['tag']
-    # add to tag list
+    # Add to tag list
     tags.append(tag)
     for pattern in intent['patterns']:
-        # tokenize each word in the sentence
+        # Tokenize each word in the sentence
         w = tokenize(pattern)
-        # add to our words list
+        # Add to our words list
         all_words.extend(w)
-        # add to xy pair
+        # Add to xy pair
         xy.append((w, tag))
 
-# stem and lower each word
+# Stem and lower each word
 ignore_words = ['?', '.', '!']
 all_words = [stem(w) for w in all_words if w not in ignore_words]
-# remove duplicates and sort
+# Remove duplicates and sort
 all_words = sorted(set(all_words))
 tags = sorted(set(tags))
 
@@ -39,7 +38,7 @@ print(len(xy), "patterns")
 print(len(tags), "tags:", tags)
 print(len(all_words), "unique stemmed words:", all_words)
 
-# create training data
+# Create training data
 X_train = []
 y_train = []
 for (pattern_sentence, tag) in xy:
@@ -62,24 +61,25 @@ hidden_size = 8
 output_size = len(tags)
 print(input_size, output_size)
 
+# Define Dataset class for DataLoader
+
 
 class ChatDataset(Dataset):
-
     def __init__(self):
         self.n_samples = len(X_train)
         self.x_data = X_train
         self.y_data = y_train
 
-    # support indexing such that dataset[i] can be used to get i-th sample
     def __getitem__(self, index):
         return self.x_data[index], self.y_data[index]
 
-    # we can call len(dataset) to return the size
     def __len__(self):
         return self.n_samples
 
 
 dataset = ChatDataset()
+
+# DataLoader
 train_loader = DataLoader(dataset=dataset,
                           batch_size=batch_size,
                           shuffle=True,
@@ -87,6 +87,7 @@ train_loader = DataLoader(dataset=dataset,
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
+# Define the model
 model = NeuralNet(input_size, hidden_size, output_size).to(device)
 
 # Loss and optimizer
@@ -101,8 +102,6 @@ for epoch in range(num_epochs):
 
         # Forward pass
         outputs = model(words)
-        # if y would be one-hot, we must apply
-        # labels = torch.max(labels, 1)[1]
         loss = criterion(outputs, labels)
 
         # Backward and optimize
@@ -113,9 +112,9 @@ for epoch in range(num_epochs):
     if (epoch+1) % 100 == 0:
         print(f'Epoch [{epoch+1}/{num_epochs}], Loss: {loss.item():.4f}')
 
+print(f'Final loss: {loss.item():.4f}')
 
-print(f'final loss: {loss.item():.4f}')
-
+# Save the trained model
 data = {
     "model_state": model.state_dict(),
     "input_size": input_size,
@@ -128,4 +127,4 @@ data = {
 FILE = "data.pth"
 torch.save(data, FILE)
 
-print(f'training complete. file saved to {FILE}')
+print(f'Training complete. File saved to {FILE}')

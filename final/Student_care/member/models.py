@@ -18,7 +18,10 @@ class Student(models.Model):
     password = models.CharField(max_length=100)
     first_name = models.CharField(max_length=100, default="New_Student")
     last_name = models.CharField(max_length=100, default="")
-    fee = models.DecimalField(default=0, decimal_places=2, max_digits=10)
+    fee = models.CharField(default='0.00', max_length=15)
+    # Assuming joining year is an integer
+    joining_year = models.CharField(max_length=100, default="")
+    field_of_study = models.CharField(max_length=100, default="")
 
     def __str__(self):
         return f'{self.first_name} {self.last_name}'
@@ -30,3 +33,11 @@ class Announcement(models.Model):
 
     def __str__(self):
         return self.text
+# models.py
+
+
+# models.py
+class Intent(models.Model):
+    tag = models.CharField(max_length=100)
+    patterns = models.JSONField()
+    responses = models.JSONField()
