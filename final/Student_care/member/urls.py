@@ -22,6 +22,9 @@ urlpatterns = [
 
     path('edit_studnt/', views.edit_student, name='edit_student'),
 
+    path('get', views.chatbot_response, name='get_bot_response'),
+    path('chatbot/', views.home, name='home'),
+
 
 
 

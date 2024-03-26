@@ -1,130 +1,84 @@
-import numpy as np
+from tensorflow.keras.optimizers import SGD
+from tensorflow.keras.layers import Dense, Activation, Dropout
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.models import load_model
 import random
-import torch
-import torch.nn as nn
-from torch.utils.data import Dataset, DataLoader
-from nltk_utils import bag_of_words, tokenize, stem
-from model import NeuralNet
-from .models import Intent  # Import your Django model here
+import json
+import numpy as np
+import pickle
+import nltk
+from nltk.stem import WordNetLemmatizer
 
-# Retrieve intents from the database model
-intents = Intent.objects.all().values()
+nltk.download('punkt')
+nltk.download('wordnet')
 
-all_words = []
-tags = []
-xy = []
+lemmatizer = WordNetLemmatizer()
 
-# Loop through each record in the database model
-for intent in intents:
-    tag = intent['tag']
-    # Add to tag list
-    tags.append(tag)
+words = []
+classes = []
+documents = []
+ignore_words = ["?", "!"]
+data_file = open(
+    r'C:\Users\Mr Bishal\OneDrive\FYP_project\Chatbot\final\Student_care\member\intents.json').read()
+intents = json.loads(data_file)
+for intent in intents['intents']:
     for pattern in intent['patterns']:
-        # Tokenize each word in the sentence
-        w = tokenize(pattern)
-        # Add to our words list
-        all_words.extend(w)
-        # Add to xy pair
-        xy.append((w, tag))
+        w = nltk.word_tokenize(pattern)
+        words.extend(w)
+        documents.append((w, intent['tag']))
+        if intent['tag'] not in classes:
+            classes.append(intent['tag'])
 
-# Stem and lower each word
-ignore_words = ['?', '.', '!']
-all_words = [stem(w) for w in all_words if w not in ignore_words]
-# Remove duplicates and sort
-all_words = sorted(set(all_words))
-tags = sorted(set(tags))
+# lemmatize
+words = [lemmatizer.lemmatize(w.lower())
+         for w in words if w not in ignore_words]
+words = sorted(list(set(words)))
+classes = sorted(list(set(classes)))
 
-print(len(xy), "patterns")
-print(len(tags), "tags:", tags)
-print(len(all_words), "unique stemmed words:", all_words)
+print(len(documents), "documents")
+print(len(classes), 'classes', classes)
+print(len(words), "unique lemmatized words", words)
 
-# Create training data
-X_train = []
-y_train = []
-for (pattern_sentence, tag) in xy:
-    # X: bag of words for each pattern_sentence
-    bag = bag_of_words(pattern_sentence, all_words)
-    X_train.append(bag)
-    # y: PyTorch CrossEntropyLoss needs only class labels, not one-hot
-    label = tags.index(tag)
-    y_train.append(label)
+pickle.dump(words, open(
+    r'C:\Users\Mr Bishal\OneDrive\FYP_project\Chatbot\final\Student_care\member\pickles\words.pkl', 'wb'))
+pickle.dump(classes, open(
+    r'C:\Users\Mr Bishal\OneDrive\FYP_project\Chatbot\final\Student_care\member\pickles\classes.pkl', 'wb'))
+pickle.dump(documents, open(
+    r'C:\Users\Mr Bishal\OneDrive\FYP_project\Chatbot\final\Student_care\member\pickles\documents.pkl', 'wb'))
 
-X_train = np.array(X_train)
-y_train = np.array(y_train)
+# Collecting the Training Data (Data Preprocessing)
+training = []
+output_empty = [0] * len(classes)
+for doc in documents:
+    bag = []
+    # gives only the lemmatized words from the documents.
+    pattern_words = doc[0]
+    # lemmatize the pattern_words
+    pattern_words = [lemmatizer.lemmatize(
+        word.lower()) for word in pattern_words]
+    for w in words:
+        bag.append(1) if w in pattern_words else bag.append(0)
+    output_row = list(output_empty)
+    output_row[classes.index(doc[1])] = 1
+    training.append([bag, output_row])
+random.shuffle(training)
+training = np.array(training, dtype=object)
+train_x = list(training[:, 0])
+train_y = list(training[:, 1])
+print('Training data done')
 
-# Hyper-parameters
-num_epochs = 1000
-batch_size = 8
-learning_rate = 0.001
-input_size = len(X_train[0])
-hidden_size = 8
-output_size = len(tags)
-print(input_size, output_size)
+# Create Model
+model = Sequential()
+model.add(Dense(128, input_shape=(len(train_x[0]), ), activation='relu'))
+model.add(Dropout(0.5))
+model.add(Dense(64, activation='relu'))
+model.add(Dropout(0.5))
+model.add(Dense(len(train_y[0]), activation='softmax'))
+sgd = SGD(learning_rate=0.01, momentum=0.9, nesterov=True)
+model.compile(loss='categorical_crossentropy',
+              optimizer=sgd, metrics=['accuracy'])
+hist = model.fit(np.array(train_x), np.array(train_y),
+                 epochs=200, batch_size=5, verbose=1)
+model.save('sav\models\chatbot_model.h5', hist)
 
-# Define Dataset class for DataLoader
-
-
-class ChatDataset(Dataset):
-    def __init__(self):
-        self.n_samples = len(X_train)
-        self.x_data = X_train
-        self.y_data = y_train
-
-    def __getitem__(self, index):
-        return self.x_data[index], self.y_data[index]
-
-    def __len__(self):
-        return self.n_samples
-
-
-dataset = ChatDataset()
-
-# DataLoader
-train_loader = DataLoader(dataset=dataset,
-                          batch_size=batch_size,
-                          shuffle=True,
-                          num_workers=0)
-
-device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-
-# Define the model
-model = NeuralNet(input_size, hidden_size, output_size).to(device)
-
-# Loss and optimizer
-criterion = nn.CrossEntropyLoss()
-optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
-
-# Train the model
-for epoch in range(num_epochs):
-    for (words, labels) in train_loader:
-        words = words.to(device)
-        labels = labels.to(dtype=torch.long).to(device)
-
-        # Forward pass
-        outputs = model(words)
-        loss = criterion(outputs, labels)
-
-        # Backward and optimize
-        optimizer.zero_grad()
-        loss.backward()
-        optimizer.step()
-
-    if (epoch+1) % 100 == 0:
-        print(f'Epoch [{epoch+1}/{num_epochs}], Loss: {loss.item():.4f}')
-
-print(f'Final loss: {loss.item():.4f}')
-
-# Save the trained model
-data = {
-    "model_state": model.state_dict(),
-    "input_size": input_size,
-    "hidden_size": hidden_size,
-    "output_size": output_size,
-    "all_words": all_words,
-    "tags": tags
-}
-
-FILE = "data.pth"
-torch.save(data, FILE)
-
-print(f'Training complete. File saved to {FILE}')
+print("model created")

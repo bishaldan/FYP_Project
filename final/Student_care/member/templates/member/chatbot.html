@@ -1,44 +1,105 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chatbot</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+          /* Your CSS styles here */
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .chat-container {
+            border: 1px solid #ccc;
+            width: 600px; /* Adjust width as needed */
+            height: 500px; /* Adjust height as needed */
+            margin: 0 auto;
+            padding: 10px;
+            border-radius: 5px;
+            overflow: hidden; /* Add overflow to hide scrollbar */
+        }
+        .messages {
+            height: 400px; /* Adjust height as needed */
+            overflow-y: scroll;
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .message {
+            margin-bottom: 10px;
+            padding: 5px 10px;
+            border-radius: 5px;
+            background-color: #f2f2f2;
+        }
+        .user-message {
+            background-color: #d3e0ea;
+            text-align: right;
+        }
+        .bot-message {
+            background-color: #e7f0c3;
+        }
+        .input-message {
+            width: 100%;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
-    <h1>Chatbot</h1>
-    <div id="chat-container">
-        <div id="chat-box"></div>
-        <input type="text" id="user-input">
+    <div class="chat-container">
+        <div class="messages" id="message-container">
+            <!-- Messages will be displayed here -->
+        </div>
+        <input type="text" id="user-input" class="input-message" placeholder="Type your message...">
         <button onclick="sendMessage()">Send</button>
     </div>
 
     <script>
         function sendMessage() {
-            var userInput = document.getElementById("user-input").value;
-            var chatBox = document.getElementById("chat-box");
-            var userMessage = `<div><strong>You:</strong> ${userInput}</div>`;
-            chatBox.innerHTML += userMessage;
-            document.getElementById("user-input").value = "";
-            
-            // Send user message to server
-            fetch("/chat/", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-CSRFToken": "{{ csrf_token }}"
-                },
-                body: JSON.stringify({ message: userInput })
-            })
-            .then(response => response.json())
-            .then(data => {
-                var botMessage = `<div><strong>Bot:</strong> ${data.response}</div>`;  // Update this line
-                chatBox.innerHTML += botMessage;
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
+            var userInput = document.getElementById('user-input').value;
+            if (userInput.trim() !== '') {
+                displayMessage(userInput, 'user');
+                getBotResponse(userInput);
+                document.getElementById('user-input').value = '';
+            }
+        }
+
+        function displayMessage(message, sender) {
+            var messageContainer = document.getElementById('message-container');
+            var messageElement = document.createElement('div');
+            messageElement.classList.add('message');
+            messageElement.classList.add(sender + '-message');
+            messageElement.textContent = message;
+            messageContainer.appendChild(messageElement);
+            messageContainer.scrollTop = messageContainer.scrollHeight;
+        }
+
+        function getBotResponse(userInput) {
+            // Make a GET request to your Django view with userInput
+            var url = '/get?msg=' + encodeURIComponent(userInput);
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    var botResponse = data.response;
+                    displayMessage(botResponse, 'bot');
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
         }
     </script>
 </body>
