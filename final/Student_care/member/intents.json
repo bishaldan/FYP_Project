@@ -21,47 +21,46 @@
         "Class timetable"
       ],
       "responses": [
-        
-        "+-----------+----------------------+------------------------------+--------------------------------------+\n|    Day    |         Time         |    Location                  |             Subject                  |\n+-----------+----------------------+------------------------------+--------------------------------------+\n|    SUN    | 09:00 AM - 11:00 AM  |  UK Lab-Oxford               | Artificial Intelligence              |\n+-----------+----------------------+------------------------------+--------------------------------------+\n|    TUE    | 09:00 AM - 11:00 AM  |  Alumni SR9-Simran Bhattari  | Application Development             |\n+-----------+----------------------+------------------------------+--------------------------------------+\n|    WED    | 07:00 AM - 09:00 AM  |  Alumni SR1-Samir Gautam     | Advanced Database Systems Development|\n+-----------+----------------------+------------------------------+--------------------------------------+\n|    THU    | 07:00 AM - 08:30 AM  |  Kumari Hall-1(lecture)      | Advanced Database Systems Development|\n+-----------+----------------------+------------------------------+--------------------------------------+\n|    FRI    | 07:00 AM - 08:30 AM  |  Kumari Hall-1(lecture)      | Application Development             |\n+-----------+----------------------+------------------------------+--------------------------------------+\n|    FRI    | 09:00 AM - 10:30 AM  |  Kumari Hall-1(lecture)      | Artificial Intelligence              |\n+-----------+----------------------+------------------------------+--------------------------------------+\n"
+        "+-----------+----------------------+------------------------------+--------------------------------------+<br>|    Day    |         Time         |    Location                  |             Subject                  |<br>+-----------+----------------------+------------------------------+--------------------------------------+<br>|    SUN    | 09:00 AM - 11:00 AM  |  UK Lab-Oxford               | Artificial Intelligence              |<br>+-----------+----------------------+------------------------------+--------------------------------------+<br>|    TUE    | 09:00 AM - 11:00 AM  |  Alumni SR9-Simran Bhattari  | Application Development             |<br>+-----------+----------------------+------------------------------+--------------------------------------+<br>|    WED    | 07:00 AM - 09:00 AM  |  Alumni SR1-Samir Gautam     | Advanced Database Systems Development|<br>+-----------+----------------------+------------------------------+--------------------------------------+<br>|    THU    | 07:00 AM - 08:30 AM  |  Kumari Hall-1(lecture)      | Advanced Database Systems Development|<br>+-----------+----------------------+------------------------------+--------------------------------------+<br>|    FRI    | 07:00 AM - 08:30 AM  |  Kumari Hall-1(lecture)      | Application Development             |<br>+-----------+----------------------+------------------------------+--------------------------------------+<br>|    FRI    | 09:00 AM - 10:30 AM  |  Kumari Hall-1(lecture)      | Artificial Intelligence              |<br>+-----------+----------------------+------------------------------+--------------------------------------+<br>"
       ],
       "context_set": ""
     },
     {
       "tag": "c12",
       "patterns": [
-        "Route for class 12",
-        "Class 12 route",
-        "Where is class 12?",
-        "Directions to class 12"
+        "Route for Python class",
+        "Python class route",
+        "Where is the Python class?",
+        "Directions to Python class"
       ],
       "responses": [
-        "The route to class 12 is..."
+        "The route to the Python class is...<br>Day: MON<br>Time: 09:00 AM - 11:00 AM<br>Class: Python"
       ],
       "context_set": ""
     },
     {
       "tag": "c13",
       "patterns": [
-        "Route for class 13",
-        "Class 13 route",
-        "Where is class 13?",
-        "Directions to class 13"
+        "Route for Java class",
+        "Java class route",
+        "Where is the Java class?",
+        "Directions to Java class"
       ],
       "responses": [
-        "The route to class 13 is..."
+        "The route to the Java class is...<br>Day: TUE<br>Time: 11:30 AM - 01:00 PM<br>Class: Java"
       ],
       "context_set": ""
     },
     {
       "tag": "c14",
       "patterns": [
-        "Route for class 14",
-        "Class 14 route",
-        "Where is class 14?",
-        "Directions to class 14"
+        "Route for Database class",
+        "Database class route",
+        "Where is the Database class?",
+        "Directions to Database class"
       ],
       "responses": [
-        "The route to class 14 is..."
+        "The route to the Database class is...<br>Day: WED<br>Time: 02:00 PM - 03:30 PM<br>Class: Database"
       ],
       "context_set": ""
     }

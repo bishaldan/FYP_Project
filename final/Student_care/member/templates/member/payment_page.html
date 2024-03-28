@@ -1,1 +1,9 @@
 <h1> welcom to payment </h1>
+
+<form action="{% url 'payment_page' %}" method="POST">
+    {% csrf_token %}
+    <input type="hidden" name="purchase_order_id" value="2">
+    <input type="hidden" name="return_url" value="http://127.0.0.1:8000/student/">
+    <input type="text" name="amount" value="1000">
+    <input type="submit">
+</form>

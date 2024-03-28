@@ -22,6 +22,7 @@ from django.contrib import messages
 from datetime import datetime
 from .forms import AnnouncementForm
 from django.http import HttpResponse
+import requests
 
 
 from django.shortcuts import render, redirect, get_object_or_404
@@ -189,8 +190,39 @@ def fee_status(request):
 
 
 def payment_page(request):
-    # Add your logic for the payment page view here
-    return render(request, 'payment_page.html')
+    url = "https://a.khalti.com/api/v2/epayment/initiate/"
+
+    return_url = request.POST.get('return_url')
+    purchase_order_id = request.POST.get('purchase_order_id')
+    amount = request.POST.get('amount')
+
+    print("p", purchase_order_id)
+    print("R", return_url)
+    print("A", amount)
+
+    payload = json.dumps({
+        "return_url": return_url,
+        "website_url": "http://127.0.0.1:8000",
+        "amount": amount,
+        "purchase_order_id": purchase_order_id,
+        "purchase_order_name": "test",
+        "customer_info": {
+            "name": "Ram Bahadur",
+            "email": "test@khalti.com",
+            "phone": "9800000001"
+        }
+    })
+    headers = {
+        'Authorization': 'key e9473cddb368484f9e3363f43f88487d',
+        'Content-Type': 'application/json',
+    }
+
+    response = requests.request("POST", url, headers=headers, data=payload)
+
+    print(response.text)
+    new_res = json.loads(response.text)
+    print(new_res)
+    return redirect(new_res['payment_url'])
 
 
 def edit_student(request, email):
@@ -211,7 +243,7 @@ lemmatizer = WordNetLemmatizer()
 
 THRESHOLD = 0.25
 model = load_model(
-    r'C:\Users\Mr Bishal\OneDrive\Chatbot\new chatbot\sav\models\chatbot_model.h5')
+    r'C:\Users\Mr Bishal\OneDrive\FYP_project\Chatbot\final\Student_care\sav\models\chatbot_model.h5')
 intents = json.loads(
     open(r'C:\Users\Mr Bishal\OneDrive\Chatbot\new chatbot\intents.json').read())
 words = pickle.load(

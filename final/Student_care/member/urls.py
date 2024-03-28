@@ -17,13 +17,14 @@ urlpatterns = [
          name='announcement_student'),
     # URL pattern for fee Status
     path('fee_status/', views.fee_status, name='fee_status'),
-    path('payment/', views.payment_page, name='payment_page'),
+    path('payment_page/', views.payment_page, name='payment_page'),
     # path('chatbot/', views.chat_with_bot, name='chatbot')
 
     path('edit_studnt/', views.edit_student, name='edit_student'),
 
     path('get', views.chatbot_response, name='get_bot_response'),
     path('chatbot/', views.home, name='home'),
+
 
 
 
